@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<meta name="theme-color" content="#4d16d7">
+<title>Phone.pe — Demo</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(180deg,#d9c9ff,#fff);
+  color:#211052;
+}
+
+body{min-height:100vh}
+
+button,input{font:inherit}
+button{border:0;cursor:pointer}
+
+.screen{
+  display:none;
+  min-height:100vh;
+  padding:18px 14px 35px;
+}
+
+.screen.active{display:block}
+
+.card{
+  max-width:430px;
+  min-height:calc(100vh - 35px);
+  margin:auto;
+  background:#fff;
+  border-radius:28px;
+  padding:20px;
+  box-shadow:0 10px 35px rgba(50,15,120,.18);
+}
+
+.top{
+  background:linear-gradient(145deg,#4010c8,#7520e9);
+  color:white;
+  padding:22px;
+  border-radius:25px;
+}
+
+.brand{
+  font-size:29px;
+  font-weight:900;
+}
+
+.sim{
+  display:inline-block;
+  background:#ffe34b;
+  color:#28135c;
+  padding:7px 14px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:900;
+}
+
+.title{
+  font-size:29px;
+  margin:18px 0 20px;
+  color:#29106e;
+}
+
+.primary{
+  width:100%;
+  padding:15px;
+  border-radius:15px;
+  background:linear-gradient(90deg,#5918dc,#7b20e8);
+  color:#fff;
+  font-weight:900;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.option{
+  background:white;
+  border:1px solid #ded6ea;
+  border-radius:22px;
+  padding:18px 9px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(50,10,100,.1);
+}
+
+.option h3{
+  font-size:17px;
+  margin:0 0 15px;
+}
+
+.price{
+  background:linear-gradient(90deg,#7517e0,#a521e9);
+  color:#fff;
+  font-size:29px;
+  font-weight:900;
+  padding:13px 4px;
+  margin:0 -9px 15px;
+}
+
+.option ul{
+  text-align:left;
+  padding-left:20px;
+  font-size:12px;
+  line-height:1.9;
+  min-height:125px;
+}
+
+.home-buttons{
+  margin-top:18px;
+}
+
+.back{
+  background:none;
+  color:#3d128d;
+  font-size:21px;
+  padding:3px 0 12px;
+}
+
+.payment-head{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.amount{
+  text-align:right;
+}
+
+.amount strong{
+  display:block;
+  font-size:30px;
+}
+
+.order{
+  margin:16px 0;
+}
+
+.qrbox{
+  width:270px;
+  height:270px;
+  margin:20px auto;
+  padding:12px;
+  border:2px solid #ddd;
+  border-radius:20px;
+}
+
+.qr{
+  width:100%;
+  height:100%;
+  background:
+    repeating-conic-gradient(#111 0 8deg,#fff 8deg 16deg);
+  position:relative;
+  overflow:hidden;
+}
+
+.qr-center{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#35108b;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  font-weight:900;
+  border:5px solid white;
+}
+
+.info{
+  text-align:center;
+  color:#645879;
+  line-height:1.5;
+}
+
+.codebox{
+  border:2px solid #dac8ef;
+  border-radius:18px;
+  padding:15px;
+  margin-top:20px;
+}
+
+.codebox h3{
+  color:#5015a5;
+  margin:0 0 5px;
+}
+
+.code-row{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.code-row input{
+  flex:1;
+  min-width:0;
+  border:2px solid #d7cee2;
+  border-radius:12px;
+  padding:13px;
+  outline:none;
+}
+
+.unlock{
+  background:#6020dc;
+  color:white;
+  border-radius:12px;
+  padding:0 16px;
+  font-weight:900;
+}
+
+.message{
+  display:none;
+  margin-top:10px;
+  padding:10px;
+  border-radius:10px;
+  font-weight:800;
+}
+
+.message.show{display:block}
+
+.error{
+  background:#ffe3e3;
+  color:#a30000;
+}
+
+.success{
+  background:#dcffe7;
+  color:#08752d;
+}
+
+/* Demo app */
+
+.dashboard{
+  max-width:430px;
+  margin:auto;
+  background:white;
+  min-height:100vh;
+}
+
+.dash-top{
+  background:linear-gradient(145deg,#4010c8,#7220e8);
+  color:white;
+  padding:22px 18px 25px;
+  border-radius:0 0 28px 28px;
+}
+
+.balance-box{
+  margin-top:18px;
+  padding:18px;
+  border-radius:22px;
+  background:rgba(255,255,255,.1);
+}
+
+.balance{
+  font-size:31px;
+  font-weight:900;
+  margin:8px 0 15px;
+}
+
+.content{
+  padding:0 18px 30px;
+}
+
+.start{
+  width:62%;
+  display:block;
+  margin:-14px auto 20px;
+  position:relative;
+}
+
+.section-title{
+  font-size:21px;
+  margin:20px 0 12px;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.action{
+  background:#f2ecff;
+  color:#351080;
+  border-radius:17px;
+  padding:13px 4px;
+  font-weight:800;
+  font-size:11px;
+  text-align:center;
+}
+
+.circle{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:#5c18da;
+  color:white;
+  margin:auto auto 7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
+
+.service-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.service{
+  background:#f5efff;
+  border-radius:16px;
+  padding:16px;
+  font-weight:800;
+  color:#3c118c;
+}
+
+/* Send */
+
+.field{
+  margin-bottom:14px;
+}
+
+.field label{
+  display:block;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.field input{
+  width:100%;
+  border:2px solid #ddd6e8;
+  border-radius:12px;
+  padding:14px;
+  outline:none;
+}
+
+/* Bank */
+
+.total{
+  text-align:center;
+  color:#49149e;
+  font-size:34px;
+  font-weight:900;
+  margin:20px 0;
+}
+
+.bank{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:2px solid #e0d9e9;
+  border-radius:16px;
+  padding:15px;
+  margin:10px 0;
+}
+
+.bank.selected{
+  border-color:#641edb;
+  background:#faf7ff;
+}
+
+.bank-icon{font-size:29px}
+
+.bank-info{flex:1}
+
+.bank-info strong{display:block}
+
+/* PIN */
+
+.pin{text-align:center}
+
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin:25px;
+}
+
+.dot{
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  background:#ddd;
+}
+
+.dot.on{background:#6120dc}
+
+.keypad{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.key{
+  padding:18px;
+  border-radius:14px;
+  background:#f0eafa;
+  color:#40158e;
+  font-size:22px;
+  font-weight:900;
+}
+
+.key.pay{
+  background:#6120dc;
+  color:white;
+}
+
+/* Connecting */
+
+.connect{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.loader{
+  width:100px;
+  height:48px;
+  margin:25px auto;
+  border-radius:30px;
+  background:linear-gradient(90deg,#e28af0,#5c20dc);
+  animation:pulse 1s infinite alternate;
+}
+
+@keyframes pulse{
+  to{transform:scale(1.08)}
+}
+
+/* Success */
+
+.success-top{
+  background:#0db947;
+  color:white;
+  margin:-20px -20px 20px;
+  padding:28px 20px;
+  text-align:center;
+  border-radius:0 0 28px 28px;
+}
+
+.check{
+  width:75px;
+  height:75px;
+  margin:15px auto;
+  border-radius:50%;
+  background:#08a340;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:43px;
+}
+
+.detail-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 0;
+  border-bottom:1px solid #eee;
+}
+
+.status{
+  color:#0a9d3d;
+  background:#d9ffe7;
+  padding:6px 10px;
+  border-radius:20px;
+  font-weight:900;
+}
+
+@media(max-width:500px){
+  .screen{padding:0}
+  .card{border-radius:0}
+  .actions{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- 1 HOME -->
+<section id="home" class="screen active">
+<div class="card">
+
+  <div class="top">
+    <div class="brand">Phone.pe</div>
+    <div>Demo • Simulation</div>
+  </div>
+
+  <h1 class="title" style="text-align:center">
+    Choose your option
+  </h1>
+
+  <div class="grid2">
+
+    <div class="option">
+      <h3>NORMAL BUY<br>Phone.pe</h3>
+
+      <div class="price">₹150</div>
+
+      <ul>
+        <li>Double Bank ✓</li>
+        <li>SMS Features ✓</li>
+        <li>Permanent History ✓</li>
+        <li>Sound Box ✕</li>
+      </ul>
+
+      <button class="primary"
+              onclick="openPayment(150)">
+        BUY NOW ›
+      </button>
+    </div>
+
+    <div class="option">
+      <h3>SOUND BOX BUY<br>Phone.pe</h3>
+
+      <div class="price">₹299</div>
+
+      <ul>
+        <li>Double Bank ✓</li>
+        <li>SMS Features ✓</li>
+        <li>Permanent History ✓</li>
+        <li>Sound Box ✓</li>
+      </ul>
+
+      <button class="primary"
+              onclick="openPayment(299)">
+        BUY NOW ›
+      </button>
+    </div>
+
+  </div>
+
+  <div class="grid2 home-buttons">
+    <button class="primary">VIDEO PROOF DEKHAO ›</button>
+    <button class="primary">FEEDBACKS ›</button>
+  </div>
+
+</div>
+</section>
+
+
+<!-- 2 PAYMENT -->
+<section id="payment" class="screen">
+<div class="card">
+
+  <button class="back"
+          onclick="show('home')">
+    ← Back
+  </button>
+
+  <div class="payment-head">
+
+    <div>
+      <span class="sim">SIMULATION</span>
+      <h1 class="title">YOUR PAYMENT</h1>
+    </div>
+
+    <div class="amount">
+      <small>Amount</small>
+      <strong id="payAmount">₹299.00</strong>
+    </div>
+
+  </div>
+
+  <div class="order">
+    Order ID:
+    <strong id="orderId"></strong>
+  </div>
+
+  <div class="qrbox">
+    <div class="qr">
+      <div class="qr-center">₹</div>
+    </div>
+  </div>
+
+  <p class="info">
+    Demo QR/interface only.<br>
+    No real payment is processed.
+  </p>
+
+  <div class="codebox">
+
+    <h3>🔒 DEMO CODE</h3>
+
+    <div>
+      Enter the demo code to continue.
+    </div>
+
+    <div class="code-row">
+
+      <input id="demoCode"
+             type="password"
+             placeholder="Enter demo code"
+             autocomplete="off">
+
+      <button class="unlock"
+              onclick="unlockDemo()">
+        UNLOCK
+      </button>
+
+    </div>
+
+    <div id="codeError"
+         class="message error">
+      Wrong demo code.
+    </div>
+
+    <div id="codeSuccess"
+         class="message success">
+      ✓ Code accepted.
+    </div>
+
+  </div>
+
+</div>
+</section>
+
+
+<!-- 3 DEMO HOME -->
+<section id="demoHome" class="screen">
+<div class="dashboard">
+
+  <div class="dash-top">
+
+    <div class="brand">PayFast</div>
+    <div>Demo • Simulation</div>
+
+    <div class="balance-box">
+      <div>Total Balance</div>
+
+      <div class="balance">
+        ₹5,240.00
+      </div>
+
+      <div class="grid2">
+        <button class="primary">＋ Add Money</button>
+        <button class="primary">🏦 Bank Account</button>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="primary start"
+          onclick="show('send')">
+    Start Now →
+  </button>
+
+  <div class="content">
+
+    <h2 class="section-title">
+      Money Transfers
+    </h2>
+
+    <div class="actions">
+
+      <button class="action"
+              onclick="show('send')">
+        <div class="circle">☎</div>
+        To Mobile
+      </button>
+
+      <button class="action"
+              onclick="show('send')">
+        <div class="circle">🏦</div>
+        To Bank
+      </button>
+
+      <button class="action">
+        <div class="circle">↓</div>
+        Receive
+      </button>
+
+      <button class="action">
+        <div class="circle">₹</div>
+        Balance
+      </button>
+
+    </div>
+
+    <h2 class="section-title">
+      Recharge & Bills
+    </h2>
+
+    <div class="actions">
+      <button class="action">📱<br>Mobile</button>
+      <button class="action">📡<br>DTH</button>
+      <button class="action">⚡<br>Electricity</button>
+      <button class="action">💧<br>Water</button>
+    </div>
+
+    <h2 class="section-title">
+      Loans & Savings
+    </h2>
+
+    <div class="service-grid">
+      <div class="service">💰 Personal Loan</div>
+      <div class="service">🪙 Gold Loan</div>
+      <div class="service">📈 Mutual Funds</div>
+      <div class="service">🔐 Fixed Deposit</div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+
+<!-- 4 SEND -->
+<section id="send" class="screen">
+<div class="card">
+
+  <button class="back"
+          onclick="show('demoHome')">
+    ← Back
+  </button>
+
+  <span class="sim">SIMULATION</span>
+
+  <h1 class="title">
+    Send Money
+  </h1>
+
+  <div class="field">
+    <label>Demo Recipient</label>
+    <input value="Demo User" readonly>
+  </div>
+
+  <div class="field">
+    <label>Demo UPI ID</label>
+    <input value="demo@sim" readonly>
+  </div>
+
+  <div class="field">
+    <label>Amount</label>
+    <input id="sendAmount"
+           type="number"
+           value="500"
+           min="1">
+  </div>
+
+  <div class="field">
+    <label>Message</label>
+    <input value="Demo payment">
+  </div>
+
+  <button class="primary"
+          onclick="openBank()">
+    CONTINUE
+  </button>
+
+</div>
+</section>
+
+
+<!-- 5 BANK -->
+<section id="bank" class="screen">
+<div class="card">
+
+  <button class="back"
+          onclick="show('send')">
+    ← Back
+  </button>
+
+  <span class="sim">SIMULATION</span>
+
+  <div class="total"
+       id="bankAmount">
+    ₹500.00
+  </div>
+
+  <p style="text-align:center">
+    Select a demo payment account
+  </p>
+
+  <div class="bank selected">
+    <div class="bank-icon">🏦</div>
+
+    <div class="bank-info">
+      <strong>Demo Savings Account</strong>
+      Demo Bank • XXXX 0513
+    </div>
+
+    ✓
+  </div>
+
+  <div class="bank">
+    <div class="bank-icon">🏦</div>
+
+    <div class="bank-info">
+      <strong>Demo Secondary Account</strong>
+      Demo Bank • XXXX 7765
+    </div>
+
+    ○
+  </div>
+
+  <button id="payButton"
+          class="primary"
+          onclick="show('pin')">
+    PAY ₹500.00
+  </button>
+
+</div>
+</section>
+
+
+<!-- 6 PIN -->
+<section id="pin" class="screen">
+<div class="card pin">
+
+  <button class="back"
+          onclick="show('bank')">
+    ← Back
+  </button>
+
+  <span class="sim">DEMO PIN ONLY</span>
+
+  <h1 class="title">
+    Enter Demo PIN
+  </h1>
+
+  <p>
+    This is a simulation PIN.<br>
+    Never enter a real payment PIN.
+  </p>
+
+  <div class="dots">
+    <span class="dot" id="d1"></span>
+    <span class="dot" id="d2"></span>
+    <span class="dot" id="d3"></span>
+    <span class="dot" id="d4"></span>
+  </div>
+
+  <div class="keypad">
+
+    <button class="key" onclick="key(1)">1</button>
+    <button class="key" onclick="key(2)">2</button>
+    <button class="key" onclick="key(3)">3</button>
+
+    <button class="key" onclick="key(4)">4</button>
+    <button class="key" onclick="key(5)">5</button>
+    <button class="key" onclick="key(6)">6</button>
+
+    <button class="key" onclick="key(7)">7</button>
+    <button class="key" onclick="key(8)">8</button>
+    <button class="key" onclick="key(9)">9</button>
+
+    <button class="key" onclick="clearPin()">⌫</button>
+    <button class="key" onclick="key(0)">0</button>
+    <button class="key pay" onclick="processDemo()">PAY</button>
+
+  </div>
+
+</div>
+</section>
+
+
+<!-- 7 CONNECTING -->
+<section id="connecting" class="screen">
+<div class="card connect">
+
+  <div>
+    <span class="sim">SIMULATION</span>
+    <div class="loader"></div>
+
+    <h2>Connecting Securely</h2>
+
+    <p>
+      Processing demo transaction...
+    </p>
+  </div>
+
+</div>
+</section>
+
+
+<!-- 8 SUCCESS -->
+<section id="success" class="screen">
+<div class="card">
+
+  <div class="success-top">
+
+    <span class="sim">SIMULATION</span>
+
+    <div class="check">✓</div>
+
+    <h1>Transaction Successful</h1>
+
+    <div id="successTime"></div>
+
+  </div>
+
+  <div class="detail-row">
+    <span>Paid to</span>
+    <strong>Demo User</strong>
+  </div>
+
+  <div class="detail-row">
+    <span>Amount</span>
+    <strong id="successAmount">₹500.00</strong>
+  </div>
+
+  <div class="detail-row">
+    <span>Transaction ID</span>
+    <strong id="successTxn"></strong>
+  </div>
+
+  <div class="detail-row">
+    <span>Status</span>
+    <span class="status">DEMO SUCCESS</span>
+  </div>
+
+  <br>
+
+  <button class="primary"
+          onclick="show('details')">
+    VIEW DEMO DETAILS
+  </button>
+
+</div>
+</section>
+
+
+<!-- DETAILS -->
+<section id="details" class="screen">
+<div class="card">
+
+  <button class="back"
+          onclick="show('success')">
+    ← Back
+  </button>
+
+  <span class="sim">SIMULATION</span>
+
+  <h1 class="title">
+    Demo Transaction Details
+  </h1>
+
+  <div class="detail-row">
+    <span>Paid to</span>
+    <strong>Demo User</strong>
+  </div>
+
+  <div class="detail-row">
+    <span>Demo UPI ID</span>
+    <strong>demo@sim</strong>
+  </div>
+
+  <div class="detail-row">
+    <span>Amount</span>
+    <strong id="detailAmount">₹500.00</strong>
+  </div>
+
+  <div class="detail-row">
+    <span>Status</span>
+    <span class="status">DEMO SUCCESS</span>
+  </div>
+
+  <div class="detail-row">
+    <span>Transaction ID</span>
+    <strong id="detailTxn"></strong>
+  </div>
+
+  <br>
+
+  <button class="primary"
+          onclick="show('demoHome')">
+    DONE
+  </button>
+
+</div>
+</section>
+
+
+<script>
+
+let sendAmount = 500;
+let pin = "";
+
+
+function show(id){
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(s => s.classList.remove("active"));
+
+  document
+    .getElementById(id)
+    .classList.add("active");
+
+  window.scrollTo(0,0);
+}
+
+
+function money(amount){
+
+  return "₹" + Number(amount).toLocaleString(
+    "en-IN",
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+  );
+
+}
+
+
+function openPayment(amount){
+
+  document.getElementById("payAmount")
+    .textContent = money(amount);
+
+  document.getElementById("orderId")
+    .textContent = "ORD" + Date.now();
+
+  document.getElementById("demoCode").value = "";
+
+  document.getElementById("codeError")
+    .classList.remove("show");
+
+  document.getElementById("codeSuccess")
+    .classList.remove("show");
+
+  show("payment");
+}
+
+
+/*
+  IMPORTANT:
+  The demo code is NOT stored here.
+  It is checked by server.js.
+*/
+
+async function unlockDemo(){
+
+  const input =
+    document.getElementById("demoCode");
+
+  const error =
+    document.getElementById("codeError");
+
+  const success =
+    document.getElementById("codeSuccess");
+
+  error.classList.remove("show");
+  success.classList.remove("show");
+
+  const code = input.value.trim();
+
+  if(!code){
+    error.textContent = "Please enter the demo code.";
+    error.classList.add("show");
+    return;
+  }
+
+  try{
+
+    const response = await fetch("/api/verify-code",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({code})
+    });
+
+    const data = await response.json();
+
+    if(data.valid){
+
+      success.classList.add("show");
+
+      setTimeout(()=>{
+        show("demoHome");
+      },500);
+
+    }else{
+
+      error.textContent = "Wrong demo code.";
+      error.classList.add("show");
+
+    }
+
+  }catch(error){
+
+    error.textContent =
+      "Server unavailable. Please try again.";
+
+    error.classList.add("show");
+
+  }
+}
+
+
+function openBank(){
+
+  sendAmount =
+    Number(
+      document.getElementById("sendAmount").value
+    ) || 500;
+
+  document.getElementById("bankAmount")
+    .textContent = money(sendAmount);
+
+  document.getElementById("payButton")
+    .textContent = "PAY " + money(sendAmount);
+
+  show("bank");
+}
+
+
+function key(number){
+
+  if(pin.length >= 4) return;
+
+  pin += String(number);
+
+  updateDots();
+}
+
+
+function clearPin(){
+
+  pin = pin.slice(0,-1);
+
+  updateDots();
+}
+
+
+function updateDots(){
+
+  for(let i=1;i<=4;i++){
+
+    document
+      .getElementById("d"+i)
+      .classList.toggle(
+        "on",
+        i <= pin.length
+      );
+
+  }
+}
+
+
+function processDemo(){
+
+  /*
+    Demo PIN is intentionally local and
+    has no connection to a real payment system.
+  */
+
+  if(pin !== "1234"){
+
+    pin = "";
+    updateDots();
+
+    alert("Wrong demo PIN.");
+    return;
+  }
+
+  show("connecting");
+
+  setTimeout(()=>{
+
+    const txn =
+      "DEMO" +
+      Math.floor(
+        100000000 +
+        Math.random()*900000000
+      );
+
+    const amountText = money(sendAmount);
+
+    document.getElementById("successAmount")
+      .textContent = amountText;
+
+    document.getElementById("detailAmount")
+      .textContent = amountText;
+
+    document.getElementById("successTxn")
+      .textContent = txn;
+
+    document.getElementById("detailTxn")
+      .textContent = txn;
+
+    document.getElementById("successTime")
+      .textContent =
+        new Date().toLocaleString("en-IN");
+
+    pin = "";
+    updateDots();
+
+    show("success");
+
+  },1800);
+}
+
+</script>
+
+</body>
+</html>
